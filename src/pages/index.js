@@ -1,21 +1,49 @@
 import React from "react"
-import { Link } from "gatsby"
-
+import Grid from '@material-ui/core/Grid';
 import Layout from "../components/layout"
-import Image from "../components/image"
-import SEO from "../components/seo"
+import SEO from "../components/seo";
+import Card from "../components/card";
 
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
-    </div>
-    <Link to="/page-2/">Go to page 2</Link>
-  </Layout>
-)
+class IndexPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      numCards: 5,
+    };
+  }
+
+  render() {
+    let Cards = [];
+    let i;
+    for (i = 1; i <= this.state.numCards; i++) {
+      Cards.push(<Card img={`${i}.jpg`} />)
+    }
+
+    return (
+      <Layout>
+        <SEO title="Home" spacing={4} />
+        <Grid container justify="center" alignItems="center">
+          <Grid item xs={6}>
+            yasfs
+          </Grid>
+          <Grid item xs={6}>
+            { Cards }
+            {/* <Card />
+            <Card /> */}
+            {/* <Card />
+            <Card />
+            <Card />
+            <Card />
+            <Card />
+            <Card />
+            <Card />
+            <Card /> */}
+          </Grid>
+        </Grid>
+      </Layout>
+    )
+  }
+}
+  
 
 export default IndexPage
