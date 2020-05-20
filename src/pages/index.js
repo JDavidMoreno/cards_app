@@ -12,12 +12,24 @@ class IndexPage extends React.Component {
     };
   }
 
+  shuffle(a) {
+      var j, x, i;
+      for (i = a.length - 1; i > 0; i--) {
+          j = Math.floor(Math.random() * (i + 1));
+          x = a[i];
+          a[i] = a[j];
+          a[j] = x;
+      }
+      return a;
+  }
+
   render() {
     let Cards = [];
     let i;
     for (i = 1; i <= this.state.numCards; i++) {
       Cards.push(<Card img={`${i}.jpg`} />)
     }
+    this.shuffle(Cards);
 
     return (
       <Layout>

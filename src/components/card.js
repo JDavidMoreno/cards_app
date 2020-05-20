@@ -15,7 +15,12 @@ class Card extends React.Component {
   }
 
   moveCard = (event) => {
-      document.getElementById(this.props.img).style.top = '24rem';
+      let card = document.getElementById(this.props.img)
+      card.style.top = '24rem';
+      setTimeout(() => {
+        // TODO: Continue here!!!!
+        card.style.zIndex = (parseInt(card.style.zIndex) * -1).toString();
+      }, 1500);
   }
 
   render() {
@@ -27,7 +32,7 @@ class Card extends React.Component {
     }
     return (
         <Box position="relative">
-          <Box id={this.props.img} position="absolute" onClick={this.moveCard} className="card" borderRadius="0.5rem" boxShadow={3} style={styles} />
+          <Box draggable="true" id={this.props.img} position="absolute" onClick={this.moveCard} className="card" borderRadius="0.5rem" boxShadow={3} style={styles} />
         </Box>
       );
     } 
