@@ -1,10 +1,23 @@
 .card {
-  height: 18rem;
-  width: 13.2rem;
+  height: 22.5rem;
+  width: 16.2rem;
   background-color: green;
   padding: 1rem;
   margin: 1rem;
   cursor: pointer;
-  top: 0;
-  transition: top 2s;
+  position: absolute;
+  border-radius: 0.5rem;
+  background-position: center;
+  background-size: cover;
+}
+
+.card-container {
+  position: relative;
+  left: 0;
+  transition: all 2s;
+}
+
+.card-position {
+  height: 22.5rem;
+  width: 16.2rem;
 }
