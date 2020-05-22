@@ -11,7 +11,9 @@ function Card(props) {
 
   const moveCard = (event) => {
       let card = document.getElementById(props.img)
-      props.onClick(card);
+      if (card.dataset.cardState !== 'done') {
+        props.onClick(card, (props.variant === 'main' ? 'cardAction' : 'messageAction'));
+      }
   }
 
   const styles = {
@@ -20,7 +22,7 @@ function Card(props) {
   }
   return (
       <Box id={props.img} className="card-container">
-        <Box draggable="true" onClick={moveCard} boxShadow={3} className="card" style={styles} />
+        <Box draggable="true" onClick={moveCard} boxShadow={3} className={'card ' + (props.variant === 'main' ? 'card-main' : 'card-message')} style={styles} />
       </Box>
     );
   }
