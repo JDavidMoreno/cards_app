@@ -9,7 +9,7 @@ import shuffleIcon from "../images/shuffle2.png";
 function IndexPage(props) {
   const [shuffledTimes, setShuffle] = useState(0);
   let variables = {
-    numCards: 5,
+    numCards: 10,
     cardAction: 1,
     messageAction: 1,
     finishCardAction: false,
@@ -43,9 +43,7 @@ function IndexPage(props) {
     }
   }
 
-  const applyTransition = (cardNode) => {
-    
-  }
+  
 
   // TODO: Move cards to original position and then shuffle
   const onClickShuffle = () => {
@@ -85,6 +83,42 @@ function IndexPage(props) {
     // }
   }
 
+  const applyTransitionBack = (cardNode, cardNodeCard, actionType) => {
+
+  }
+
+  const applyTransitionGo = (cardNode, cardNodeCard, actionType, destination) => {
+    // parseFloat(getComputedStyle(parentElement).fontSize);
+    const position = destination.getBoundingClientRect()
+    const timeTransition = variables[actionType] * 1.4;
+    cardNode.style.transition = `left ${timeTransition}s`;
+    cardNodeCard.style.transition = `all ${timeTransition}s ease-in`;
+
+    cardNode.style.left = position.left + 'px';
+    let height = cardNodeCard.offsetHeight, width = cardNodeCard.offsetWidth;
+    cardNodeCard.style.height = (parseFloat(height) + 50).toString() + 'px';
+    cardNodeCard.style.width = (parseFloat(width) + 50).toString() + 'px';
+    cardNodeCard.classList.add("card-transition-shadow")
+
+    cardNode.dataset.cardState = 'done';
+    cardNode.dataset.cardTransition = timeTransition;
+    cardNode.style.zIndex = variables[actionType];
+
+    
+    setTimeout(() => {
+      console.log(cardNodeCard.offsetHeight)
+      cardNodeCard.style.height = height + 'px';
+      cardNodeCard.style.width = width + 'px';
+      cardNodeCard.classList.remove("card-transition-shadow");
+    }, (timeTransition / 2) * 1000);
+    // I'm going to remember the nodes I've mode, so later I can put them back to the original position
+    variables.movedCardNodes.push(cardNode);
+    setTimeout(() => {
+      cardNode.style.zIndex = 0;
+    }, timeTransition * 1000)
+  }
+
+
   // Call back passed to Card components, it's returned with a html node representing the touched card and the action, which is for
   // main card or message card
   const onCardClick = (cardNode, actionType) => {
@@ -92,23 +126,13 @@ function IndexPage(props) {
     const finishType = 'finish' + actionType.charAt(0).toUpperCase() + actionType.slice(1);
     if (!variables[finishType] === true && !variables.cardsBlocked) {
       let destination;
+      const cardNodeCard = cardNode.firstElementChild;
       if (actionType === 'cardAction') {
         destination = document.getElementById(`pos${variables.cardAction}`);
       } else if (actionType === 'messageAction') {
         destination = document.getElementById(`mes${variables.messageAction}`);
       }
-      const position = destination.getBoundingClientRect()
-      const timeTransition = variables[actionType] * 1.5;
-      cardNode.dataset.cardState = 'done';
-      cardNode.dataset.cardTransition = timeTransition;
-      cardNode.style.zIndex = variables[actionType];
-      cardNode.style.transition = `left ${timeTransition}s`;
-      cardNode.style.left = position.left + 'px';
-      // I'm going to remember the nodes I've mode, so later I can put them back to the original position
-      variables.movedCardNodes.push(cardNode);
-      setTimeout(() => {
-        cardNode.style.zIndex = 0;
-      }, timeTransition * 1000)
+      applyTransitionGo(cardNode, cardNodeCard, actionType, destination);
       // Need to wait for the transitino to take place
       if (variables[actionType] !== 3) {
         variables[actionType] = variables[actionType] + 1;
