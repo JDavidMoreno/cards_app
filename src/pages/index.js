@@ -79,7 +79,7 @@ function IndexPage(props) {
   const applyTransitionGo = (cardNode, actionType, destination) => {
     const position = destination.getBoundingClientRect()
     const timeTransition = variables[actionType] * 1.4;
-    cardNode.style.transition = `left ${timeTransition}s, box-shadow ${timeTransition / 2}s`;
+    cardNode.style.transition = `left ${timeTransition}s , box-shadow ${timeTransition / 2}s`;
     cardNode.style.left = position.left + 'px';
     cardNode.classList.add("card-transition-shadow")
     cardNode.dataset.cardState = 'moved';
@@ -132,7 +132,7 @@ function IndexPage(props) {
     <Layout>
       <SEO title="Home" spacing={4} />
       <Grid container justify="center" alignItems="center" style={{'height': '100vh', 'width': '100%', padding: '1.5rem'}}>
-        <Grid item xs={3}>
+        <Grid item xs={3} style={{height: '100%'}}>
           <img onClick={onClickShuffle} className="icon" src={shuffleIcon} alt="shuffle cards" />
           <Box position="relative" className="card-position">
             { Cards }

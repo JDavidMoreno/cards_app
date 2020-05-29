@@ -36,7 +36,6 @@ function Card(props) {
   }
   
   return (
-
         <Box id={props.img} draggable="true" onClick={moveCard} className={'card ' + (props.variant === 'main' ? 'card-main' : 'card-message')} style={styles} >
           <Box className="card-inner">
             <img className="card-image" src={cardBack} style={{ width: '100%', height: '100%'}} alt="test" />
