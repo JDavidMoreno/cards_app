@@ -5,6 +5,7 @@ import Layout from "../components/layout"
 import SEO from "../components/seo";
 import Card from "../components/card";
 import shuffleIcon from "../images/shuffle2.png";
+import cardBack from "../../static/1m.jpg";
 
 function IndexPage(props) {
   const [shuffledTimes, setShuffle] = useState(0);
@@ -66,50 +67,26 @@ function IndexPage(props) {
           cardNode.style.transition = null;
           cardNode.dataset.cardState = null;
           cardNode.dataset.cardTransition = null;
+          cardNode.firstElementChild.firstElementChild.src = cardBack;
         }
       }
       _restartVariables();
       setShuffle(shuffledTimes + 1);
       variables.cardsBlocked = false;
     }, timeToWait * 1000);
-    
-    
-    
-    
-    // else {
-    //   _restartVariables();
-    //   setShuffle(shuffledTimes + 1);
-    //   variables.cardsBlocked = false
-    // }
   }
 
-  const applyTransitionBack = (cardNode, cardNodeCard, actionType) => {
-
-  }
-
-  const applyTransitionGo = (cardNode, cardNodeCard, actionType, destination) => {
-    // parseFloat(getComputedStyle(parentElement).fontSize);
+  const applyTransitionGo = (cardNode, actionType, destination) => {
     const position = destination.getBoundingClientRect()
     const timeTransition = variables[actionType] * 1.4;
-    cardNode.style.transition = `left ${timeTransition}s`;
-    cardNodeCard.style.transition = `all ${timeTransition}s ease-in`;
-
+    cardNode.style.transition = `left ${timeTransition}s, box-shadow ${timeTransition / 2}s`;
     cardNode.style.left = position.left + 'px';
-    let height = cardNodeCard.offsetHeight, width = cardNodeCard.offsetWidth;
-    cardNodeCard.style.height = (parseFloat(height) + 50).toString() + 'px';
-    cardNodeCard.style.width = (parseFloat(width) + 50).toString() + 'px';
-    cardNodeCard.classList.add("card-transition-shadow")
-
-    cardNode.dataset.cardState = 'done';
+    cardNode.classList.add("card-transition-shadow")
+    cardNode.dataset.cardState = 'moved';
     cardNode.dataset.cardTransition = timeTransition;
     cardNode.style.zIndex = variables[actionType];
-
-    
     setTimeout(() => {
-      console.log(cardNodeCard.offsetHeight)
-      cardNodeCard.style.height = height + 'px';
-      cardNodeCard.style.width = width + 'px';
-      cardNodeCard.classList.remove("card-transition-shadow");
+      cardNode.classList.remove("card-transition-shadow");
     }, (timeTransition / 2) * 1000);
     // I'm going to remember the nodes I've mode, so later I can put them back to the original position
     variables.movedCardNodes.push(cardNode);
@@ -126,13 +103,12 @@ function IndexPage(props) {
     const finishType = 'finish' + actionType.charAt(0).toUpperCase() + actionType.slice(1);
     if (!variables[finishType] === true && !variables.cardsBlocked) {
       let destination;
-      const cardNodeCard = cardNode.firstElementChild;
       if (actionType === 'cardAction') {
         destination = document.getElementById(`pos${variables.cardAction}`);
       } else if (actionType === 'messageAction') {
         destination = document.getElementById(`mes${variables.messageAction}`);
       }
-      applyTransitionGo(cardNode, cardNodeCard, actionType, destination);
+      applyTransitionGo(cardNode, actionType, destination);
       // Need to wait for the transitino to take place
       if (variables[actionType] !== 3) {
         variables[actionType] = variables[actionType] + 1;
@@ -142,7 +118,6 @@ function IndexPage(props) {
     }
   }
   
-
   let Cards = [], Messages = [];
   let i;
   for (i = 1; i <= variables.numCards; i++) {
