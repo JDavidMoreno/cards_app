@@ -633,3 +633,9 @@ pre tt:after {
   margin:auto;
   cursor: pointer;
 }
+
+.card-table {
+  height: 100vh;
+  width: 100%;
+  padding: 1.5rem;
+}

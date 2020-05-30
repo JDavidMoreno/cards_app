@@ -45,17 +45,15 @@ function IndexPage(props) {
     }
   }
 
-  
-
-  // TODO: Move cards to original position and then shuffle
+  // Moves the cards to their original position and then shuffle the deck
   const onClickShuffle = () => {
     let timeToWait = 0;
     variables.cardsBlocked = true;
     if ((variables.cardAction > 1) || (variables.messageAction > 1)) {
       let cardNode;
+      // Take the transion time for the farthest card at right
       timeToWait = Math.max(...variables.movedCardNodes.map(elem => (parseFloat(elem.dataset.cardTransition))));
       for (cardNode of variables.movedCardNodes) {
-        // Let's remember here the time that must take the card to come back to the original position :)
         cardNode.style.left = '0px';
       }
     }
@@ -63,6 +61,7 @@ function IndexPage(props) {
     setTimeout(() => {
       if ((variables.cardAction > 1) || (variables.messageAction > 1)) {
         let cardNode;
+        // Restart the values for those moved cards
         for (cardNode of variables.movedCardNodes) {
           cardNode.style.zIndex = 0;
           cardNode.style.transition = null;
@@ -77,7 +76,8 @@ function IndexPage(props) {
     }, timeToWait * 1000);
   }
 
-  const applyTransitionGo = (cardNode, actionType, destination) => {
+  // This function moves the card to one of the three possitions in the grid
+  const moveCard = (cardNode, actionType, destination) => {
     const position = destination.getBoundingClientRect()
     const timeTransition = variables[actionType] * 1.4;
     cardNode.style.transition = `left ${timeTransition}s , box-shadow ${timeTransition / 2}s`;
@@ -115,25 +115,32 @@ function IndexPage(props) {
   const onCardClick = (card, actionType) => {
     // actionType are 'cardAction' or 'messageAction'
     const finishType = 'finish' + actionType.charAt(0).toUpperCase() + actionType.slice(1);
-    if (!variables[finishType] === true && !variables.cardsBlocked) {
-      if (variables.isVerticalScreen === true) {
+    if (variables.isVerticalScreen === true) {
+      if (!variables[finishType] === true && !variables.cardsBlocked) {
         flipCard(card);
         variables[finishType] = true;
+      }
+    // Otherwise, in width big screens use the three column card positions to move
+    } else {
+      if (card.dataset.cardState === 'moved') {
+        flipCard(card);
       } else {
-        let destination;
-        if (actionType === 'cardAction') {
-          destination = document.getElementById(`pos${variables.cardAction}`);
-        } else if (actionType === 'messageAction') {
-          destination = document.getElementById(`mes${variables.messageAction}`);
+        if (!variables[finishType] === true && !variables.cardsBlocked) {
+          let destination;
+          if (actionType === 'cardAction') {
+            destination = document.getElementById(`pos${variables.cardAction}`);
+          } else if (actionType === 'messageAction') {
+            destination = document.getElementById(`mes${variables.messageAction}`);
+          }
+          moveCard(card, actionType, destination);
+          if (variables[actionType] !== 3) {
+            variables[actionType] = variables[actionType] + 1;
+          } else {
+            variables[finishType] = true;
+          }
         }
-        applyTransitionGo(card, actionType, destination);
-        if (variables[actionType] !== 3) {
-          variables[actionType] = variables[actionType] + 1;
-        } else {
-          variables[finishType] = true;
-        }
-      } 
-    }
+      }
+    } 
   }
 
   if (window.innerHeight >= window.innerWidth) {
@@ -149,11 +156,10 @@ function IndexPage(props) {
   shuffle(Cards);
   shuffle(Messages);
   
-
   return (
     <Layout>
       <SEO title="Home" spacing={4} />
-      <Grid container justify="center" alignItems="center" style={{'height': '100vh', 'width': '100%', padding: '1.5rem'}}>
+      <Grid container justify="center" alignItems="center" className="card-table">
         {variables.isVerticalScreen === true ? 
         (
           <Grid item xs={12} style={{height: '100%'}}>
@@ -168,7 +174,7 @@ function IndexPage(props) {
         ) : (
           <>
             <Grid item xs={3} style={{height: '100%'}}>
-              <img onClick={onClickShuffle} className="icon" src={shuffleIcon} alt="shuffle cards" />
+              <img onClick={onClickShuffle} className="icon" src={shuffleIcon} alt="Shuffle all the cards" />
               <Box position="relative" className="card-position">
                 { Cards }
               </Box>

@@ -11,13 +11,7 @@ function Card(props) {
   }
 
   const cardAction = (event) => {
-      let card = document.getElementById(props.img)
-      props.onCardClick(card, (props.variant === 'main' ? 'cardAction' : 'messageAction'));
-      // if (card.dataset.cardState !== 'moved' && card.dataset.cardState !== 'flipped') {
-        
-      // } else if (card.dataset.cardState === 'moved') {
-
-      // }
+    props.onCardClick(document.getElementById(props.img), (props.variant === 'main' ? 'cardAction' : 'messageAction'));
   }
 
   const styles = {
@@ -27,7 +21,7 @@ function Card(props) {
   return (
         <Box id={props.img} draggable="true" onClick={cardAction} className={'card ' + (props.variant === 'main' ? 'card-main' : 'card-message')} style={styles} >
           <Box className="card-inner">
-            <img className="card-image" src={cardBack} style={{ width: '100%', height: '100%'}} alt="test" />
+            <img className="card-image" src={cardBack} alt="A Granatovych Card" />
             <Box className="card_filter" />
           </Box> 
         </Box>
