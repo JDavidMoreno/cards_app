@@ -40,7 +40,8 @@ function IndexPage(props) {
       finishMessageAction: false,
       cards: null,
       movedCardNodes: [],
-      cardsBlocked: false
+      cardsBlocked: false,
+      isVerticalScreen: false,
     }
   }
 
@@ -95,65 +96,100 @@ function IndexPage(props) {
     }, timeTransition * 1000)
   }
 
+  const flipCard = (card) => {
+    const cardOriginalWidth = card.offsetWidth;
+    card.firstElementChild.style.width = 0;
+    card.firstElementChild.children[1].style.opacity = 1;
+    card.firstElementChild.classList.add('card-transition-flip');
+    setTimeout(() => {
+      card.firstElementChild.classList.remove('card-transition-flip');
+      card.firstElementChild.firstElementChild.src = card.id;
+      card.firstElementChild.style.width = cardOriginalWidth + 'px';
+      card.firstElementChild.children[1].style.opacity = 0;
+    }, 0.4 * 1000);
+    card.dataset.cardState = 'flipped';
+  }
 
   // Call back passed to Card components, it's returned with a html node representing the touched card and the action, which is for
   // main card or message card
-  const onCardClick = (cardNode, actionType) => {
-    // actionType are supposed to be 'cardAction' or 'messageAction'
+  const onCardClick = (card, actionType) => {
+    // actionType are 'cardAction' or 'messageAction'
     const finishType = 'finish' + actionType.charAt(0).toUpperCase() + actionType.slice(1);
     if (!variables[finishType] === true && !variables.cardsBlocked) {
-      let destination;
-      if (actionType === 'cardAction') {
-        destination = document.getElementById(`pos${variables.cardAction}`);
-      } else if (actionType === 'messageAction') {
-        destination = document.getElementById(`mes${variables.messageAction}`);
-      }
-      applyTransitionGo(cardNode, actionType, destination);
-      // Need to wait for the transitino to take place
-      if (variables[actionType] !== 3) {
-        variables[actionType] = variables[actionType] + 1;
-      } else {
+      if (variables.isVerticalScreen === true) {
+        flipCard(card);
         variables[finishType] = true;
-      }
+      } else {
+        let destination;
+        if (actionType === 'cardAction') {
+          destination = document.getElementById(`pos${variables.cardAction}`);
+        } else if (actionType === 'messageAction') {
+          destination = document.getElementById(`mes${variables.messageAction}`);
+        }
+        applyTransitionGo(card, actionType, destination);
+        if (variables[actionType] !== 3) {
+          variables[actionType] = variables[actionType] + 1;
+        } else {
+          variables[finishType] = true;
+        }
+      } 
     }
   }
-  
+
+  if (window.innerHeight >= window.innerWidth) {
+    variables.isVerticalScreen = true;
+  }
   let Cards = [], Messages = [];
   let i;
   for (i = 1; i <= variables.numCards; i++) {
-    Cards.push(<Card key={i} img={`${i}.jpg`} onClick={onCardClick} variant="main" />)
-    Messages.push(<Card key={i} img={`${i}m.jpg`} onClick={onCardClick} variant="message" />)
+    Cards.push(<Card key={i} img={`${i}.jpg`} onCardClick={onCardClick} variant="main" isVerticalScreen={variables.isVerticalScreen}/>)
+    Messages.push(<Card key={i} img={`${i}m.jpg`} onCardClick={onCardClick} variant="message" />)
   }
   variables.cards = Cards;
   shuffle(Cards);
   shuffle(Messages);
+  
 
   return (
     <Layout>
       <SEO title="Home" spacing={4} />
       <Grid container justify="center" alignItems="center" style={{'height': '100vh', 'width': '100%', padding: '1.5rem'}}>
-        <Grid item xs={3} style={{height: '100%'}}>
-          <img onClick={onClickShuffle} className="icon" src={shuffleIcon} alt="shuffle cards" />
-          <Box position="relative" className="card-position">
-            { Cards }
-          </Box>
-          <Box position="relative" className="message-position">
-            { Messages }
-          </Box>
-        </Grid>
-        <Grid item xs={3}>
-          <Box id="pos1" className="card-position" />
-          <Box id="mes1" className="message-position" />
-        </Grid>
-        <Grid item xs={3}>
-          <Box id="pos2" className="card-position" />
-          <Box id="mes2" className="message-position" />
-        </Grid>
-        <Grid item xs={3}>
-          <Box id="pos3" className="card-position" />
-          <Box id="mes3" className="message-position" />
-        </Grid>
-      </Grid>
+        {variables.isVerticalScreen === true ? 
+        (
+          <Grid item xs={12} style={{height: '100%'}}>
+            <img onClick={onClickShuffle} className="icon" src={shuffleIcon} alt="shuffle cards" />
+            <Box position="relative" className="card-position">
+              { Cards }
+            </Box>
+            <Box position="relative" className="message-position">
+              { Messages }
+            </Box>
+          </Grid>
+        ) : (
+          <>
+            <Grid item xs={3} style={{height: '100%'}}>
+              <img onClick={onClickShuffle} className="icon" src={shuffleIcon} alt="shuffle cards" />
+              <Box position="relative" className="card-position">
+                { Cards }
+              </Box>
+              <Box position="relative" className="message-position">
+                { Messages }
+              </Box>
+            </Grid>
+            <Grid item xs={3}>
+              <Box id="pos1" className="card-position" />
+              <Box id="mes1" className="message-position" />
+            </Grid>
+            <Grid item xs={3}>
+              <Box id="pos2" className="card-position" />
+              <Box id="mes2" className="message-position" />
+            </Grid>
+            <Grid item xs={3}>
+              <Box id="pos3" className="card-position" />
+              <Box id="mes3" className="message-position" />
+            </Grid>
+          </>)}
+      </Grid> 
     </Layout>
   )
   

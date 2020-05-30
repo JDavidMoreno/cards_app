@@ -73,7 +73,7 @@
   width: 85%;
 }
 
-@media screen and (max-width: 992px) {
+@media screen and (max-width: 992px){
   .card-position {
     height: 55%;
     width: 90%;
@@ -86,7 +86,21 @@
   }
 }
 
-@media screen and (max-width: 600px) {
+/* Trying to make it nicer in screens with short width but hight height like iPads  */
+@media screen and (max-height: 768px){
+  .card-position {
+    height: 50%;
+    width: 90%;
+  }
+
+  .message-position {
+    margin-top: 15%;
+    height: 55%;
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: 600px){
   .message-position {
     margin-top: 15%;
     height: 60%;
