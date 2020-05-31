@@ -1,11 +1,14 @@
 import React, { useState } from "react"
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import Layout from "../components/layout"
+import Layout from "../components/layout";
+import Table from "../components/table";
 import SEO from "../components/seo";
 import Card from "../components/card";
 import shuffleIcon from "../images/shuffle2.png";
 import cardBack from "../../static/1m.jpg";
+import ExpandMoreRounded from '@material-ui/icons/ExpandMoreRounded';
+import RefreshRounded from '@material-ui/icons/RefreshRounded';
 
 function IndexPage(props) {
   const [shuffledTimes, setShuffle] = useState(0);
@@ -159,23 +162,13 @@ function IndexPage(props) {
   return (
     <Layout>
       <SEO title="Home" spacing={4} />
-      <Grid container justify="center" className="card-table">
-        {variables.isVerticalScreen === true ? 
-        (
-          <Grid item xs={12} style={{height: '100%'}}>
-            <img onClick={onClickShuffle} className="icon" src={shuffleIcon} alt="shuffle cards" />
-            {/* <Box position="relative" className="card-position" style={variables.isVerticalScreen === true ? {margin: 'auto'} : {}}> */}
-            <Box position="relative" className="card-position" style={{margin: 'auto'}}>
-              { Cards }
-            </Box>
-            <Box position="relative" className="message-position" style={{marginLeft: 'auto', marginRight: 'auto'}}>
-              { Messages }
-            </Box>
-          </Grid>
-        ) : (
-          <>
-            <Grid item xs={3} style={{height: '100%'}}>
-              <img onClick={onClickShuffle} className="icon" src={shuffleIcon} alt="Shuffle all the cards" />
+      <Table>
+        <Grid container justify="center" className="card-table">
+          {variables.isVerticalScreen === true ? 
+          (
+            <Grid item xs={12} style={{height: '100%'}}>
+              <img onClick={onClickShuffle} className="icon" src={shuffleIcon} alt="shuffle cards" />
+              {/* <Box position="relative" className="card-position" style={variables.isVerticalScreen === true ? {margin: 'auto'} : {}}> */}
               <Box position="relative" className="card-position">
                 { Cards }
               </Box>
@@ -183,21 +176,36 @@ function IndexPage(props) {
                 { Messages }
               </Box>
             </Grid>
-            <Grid item xs={3}>
-              <Box id="pos1" className="card-position" />
-              <Box id="mes1" className="message-position" />
-            </Grid>
-            <Grid item xs={3}>
-              <Box id="pos2" className="card-position" />
-              <Box id="mes2" className="message-position" />
-            </Grid>
-            <Grid item xs={3}>
-              <Box id="pos3" className="card-position" />
-              <Box id="mes3" className="message-position" />
-            </Grid>
-          </>)}
-      </Grid> 
+          ) : (
+            <>
+              <Grid item xs={3} style={{height: '97%'}}>
+                {/* <img onClick={onClickShuffle} className="icon" src={shuffleIcon} alt="Shuffle all the cards" /> */}
+                <RefreshRounded id="shuffle-cards" onClick={onClickShuffle} alt="Shuffle all the cards"/>
+                <Box position="relative" className="card-position">
+                  { Cards }
+                </Box>
+                <Box position="relative" className="message-position">
+                  { Messages }
+                </Box>
+              </Grid>
+              <Grid item xs={3}>
+                <Box id="pos1" className="card-position" />
+                <Box id="mes1" className="message-position" />
+              </Grid>
+              <Grid item xs={3}>
+                <Box id="pos2" className="card-position" />
+                <Box id="mes2" className="message-position" />
+              </Grid>
+              <Grid item xs={3}>
+                <Box id="pos3" className="card-position" />
+                <Box id="mes3" className="message-position" />
+              </Grid>
+              <ExpandMoreRounded id="expand-more" onClick={() => window.scrollTo({top: 100, left: 1000, behavior: 'smooth'})}/>
+            </>)}
+        </Grid> 
+      </Table>
     </Layout>
+    
   )
   
 }
