@@ -13,13 +13,11 @@ import "./layout.css"
 const Layout = ({ children }) => {
 
   return (
-    <>
-      <div className="layout" style={{backgroundImage: "url('table.jpg')"}}>
-        <main>
-          {children}
-        </main>
-      </div>
-    </>
+    <div>
+      <main>
+        {children}
+      </main>
+    </div>
   )
 }
 

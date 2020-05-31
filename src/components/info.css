@@ -1,0 +1,5 @@
+.info-box {
+  padding: 5rem;
+  background: linear-gradient(to bottom, #9b9b9b 0%, #ffffff 50%);
+  color: gray;
+}

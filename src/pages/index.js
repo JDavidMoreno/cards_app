@@ -3,6 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Layout from "../components/layout";
 import Table from "../components/table";
+import Info from "../components/info";
 import SEO from "../components/seo";
 import Card from "../components/card";
 import shuffleIcon from "../images/shuffle2.png";
@@ -204,6 +205,7 @@ function IndexPage(props) {
             </>)}
         </Grid> 
       </Table>
+      <Info />
     </Layout>
     
   )
