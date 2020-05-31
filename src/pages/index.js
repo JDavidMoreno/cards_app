@@ -6,7 +6,6 @@ import Table from "../components/table";
 import Info from "../components/info";
 import SEO from "../components/seo";
 import Card from "../components/card";
-import shuffleIcon from "../images/shuffle2.png";
 import cardBack from "../../static/1m.jpg";
 import ExpandMoreRounded from '@material-ui/icons/ExpandMoreRounded';
 import RefreshRounded from '@material-ui/icons/RefreshRounded';
