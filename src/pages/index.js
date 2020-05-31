@@ -159,15 +159,16 @@ function IndexPage(props) {
   return (
     <Layout>
       <SEO title="Home" spacing={4} />
-      <Grid container justify="center" alignItems="center" className="card-table">
+      <Grid container justify="center" className="card-table">
         {variables.isVerticalScreen === true ? 
         (
           <Grid item xs={12} style={{height: '100%'}}>
             <img onClick={onClickShuffle} className="icon" src={shuffleIcon} alt="shuffle cards" />
-            <Box position="relative" className="card-position">
+            {/* <Box position="relative" className="card-position" style={variables.isVerticalScreen === true ? {margin: 'auto'} : {}}> */}
+            <Box position="relative" className="card-position" style={{margin: 'auto'}}>
               { Cards }
             </Box>
-            <Box position="relative" className="message-position">
+            <Box position="relative" className="message-position" style={{marginLeft: 'auto', marginRight: 'auto'}}>
               { Messages }
             </Box>
           </Grid>

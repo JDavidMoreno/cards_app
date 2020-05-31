@@ -47,7 +47,7 @@
 }
 
 .card-message {
-  height: 30%;
+  height: 100%;
   width: 100%;
 }
 
@@ -71,7 +71,7 @@
 
 .message-position {
   margin-top: 15%;
-  height: 60%;
+  height: 20%;
   width: 85%;
 }
 
@@ -83,7 +83,7 @@
 
   .message-position {
     margin-top: 15%;
-    height: 55%;
+    height: 20%;
     width: 90%;
   }
 }
@@ -97,7 +97,7 @@
 
   .message-position {
     margin-top: 15%;
-    height: 55%;
+    height: 20%;
     width: 90%;
   }
 }
